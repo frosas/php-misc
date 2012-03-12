@@ -1,6 +1,6 @@
 <?php
 
-namespace Frosas\AsyncHttpClient\Zend;
+namespace Frosas\Http;
 
 class Client extends \Zend\Http\Client
 {

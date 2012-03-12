@@ -1,6 +1,6 @@
 <?php
 
-namespace Frosas\AsyncHttpClient\Zend\Adapter;
+namespace Frosas\Http\Adapter;
 
 /**
  * The adapter that gets the response
@@ -10,7 +10,7 @@ class Reader implements \Zend\Http\Client\Adapter
     private $connections;
     private $lastRespondedConnection;
     
-    function __construct(\Frosas\AsyncHttpClient\Zend\Connections $connections)
+    function __construct(\Frosas\Http\Connections $connections)
     {
         $this->connections = $connections;
     }

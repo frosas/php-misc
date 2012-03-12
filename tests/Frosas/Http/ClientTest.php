@@ -1,6 +1,6 @@
 <?php
 
-namespace Frosas\AsyncHttpClient\Zend;
+namespace Frosas\Http;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {

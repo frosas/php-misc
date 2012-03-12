@@ -1,6 +1,6 @@
 <?php
 
-namespace Frosas\AsyncHttpClient\Zend\Adapter;
+namespace Frosas\Http\Adapter;
 
 /**
  * The adapter that makes the request 
@@ -11,7 +11,7 @@ class Writer extends \Zend\Http\Client\Adapter\Socket
 {
     private $connections;
     
-    function __construct(\Frosas\AsyncHttpClient\Zend\Connections $connections)
+    function __construct(\Frosas\Http\Connections $connections)
     {
         parent::__construct();
         $this->connections = $connections;
