@@ -40,6 +40,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client->send();
     }
     
+    function testHttp404Connection()
+    {
+        $client = new Client(self::HTTP_404_URL);
+        $client->send();
+        $response = $client->updateToNextResponse();
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+    
     private function assertIsHtml($string)
     {
         $this->assertTrue(
