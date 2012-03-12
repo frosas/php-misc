@@ -33,6 +33,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(count($urls), $responses);
     }
     
+    function testUnknownDomainConnection()
+    {
+        $client = new Client(self::UNKNOWN_DOMAIN_URL);
+        $this->setExpectedException('RuntimeException');
+        $client->send();
+    }
+    
     private function assertIsHtml($string)
     {
         $this->assertTrue(
