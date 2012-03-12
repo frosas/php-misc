@@ -2,6 +2,9 @@
 
 namespace Frosas\Http;
 
+/**
+ * TODO Don't be a Zend Client but composite it instead?
+ */
 class Client extends \Zend\Http\Client
 {
     private $connections;
