@@ -2,9 +2,12 @@
 
 namespace Frosas\Http;
 
+use Zend\Http\Client;
+
 class ClientsTest extends \PHPUnit_Framework_TestCase {
 
     const HTTP_200_URL = 'http://www.iana.org/domains/example/';
+    const HTTP_302_URL = 'http://example.com';
     const HTTP_404_URL = 'http://www.iana.org/domains/example/404';
     const UNKNOWN_DOMAIN_URL = 'http://doesntexist.example.com';
 
@@ -30,7 +33,20 @@ class ClientsTest extends \PHPUnit_Framework_TestCase {
     function testHttp404Connection() {
         $clients = new Clients(self::HTTP_404_URL);
         $response = $clients->next()->getResponse();
-        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertTrue($response->isNotFound());
+    }
+
+    function testRedirect() {
+        $clients = new Clients(self::HTTP_302_URL);
+        $response = $clients->next()->getResponse();
+        $this->assertTrue($response->isSuccess());
+    }
+    
+    function testMaxRedirects() {
+        $client = new Client(self::HTTP_302_URL, array('maxredirects' => 0));
+        $clients = new Clients($client);
+        $response = $clients->next()->getResponse();
+        $this->assertTrue($response->isRedirect());
     }
     
     private function assertIsHtml($string) {

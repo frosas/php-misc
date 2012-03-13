@@ -40,15 +40,20 @@ class Clients {
                 if ($data === '') { // End of response
                     unset($this->connectionsActive[(int) $socket]);
                     $this->connectionsDone[] = $connection;
+
+                    $response = $connection['client']->send();
+                    if ($response->isRedirect() && $connection['maxRemainingRedirects']) {
+                        $connection['maxRemainingRedirects']--;
+                        $this->connectionsQueued[] = $connection;
+                    }
+
                     $this->fillActiveConnectionsQueue(); // Add another one
                 }
             }
         }
         
         if ($connection = array_shift($this->connectionsDone)) {
-            $client = $connection['client'];
-            $client->send();
-            return $client;
+            return $connection['client'];
         }
     }
 
@@ -69,6 +74,13 @@ class Clients {
             // Connect + send request
             $client = $connection['client'];
             $client->setAdapter(new Adapter\Writer);
+
+            if (! array_key_exists('maxRemainingRedirects', $connection)) {
+                // This should be in add() but until now we weren't sure whether the client had an 
+                // adapter (needed by clientMaxRedirects())
+                $connection['maxRemainingRedirects'] = $this->clientMaxRedirects($client);
+            }
+
             $client->send();
 
             // Prepare client for receiving response
@@ -80,5 +92,12 @@ class Clients {
 
             $this->connectionsActive[(int) $socket] = $connection;
         }
+    }
+
+    private function clientMaxRedirects(Client $client) {
+        // There is no way to get the config from the Client itself but the one in its adapter 
+        // should be the same
+        $config = $client->getAdapter()->getConfig();
+        return $config['maxredirects'];
     }
 }
