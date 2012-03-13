@@ -12,7 +12,10 @@ class Clients {
     private $maxActiveConnections = 10;
 
     function __construct($clients = null) {
-        foreach ((array) $clients as $client) $this->add($client);
+        if ($clients) {
+            if (! is_array($clients)) $clients = array($clients);
+            foreach ($clients as $client) $this->add($client);
+        }
     }
 
     function add($client) {
