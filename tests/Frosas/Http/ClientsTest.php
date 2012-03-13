@@ -18,8 +18,7 @@ class ClientsTest extends \PHPUnit_Framework_TestCase {
     function testRequestsAndResponsesCountsMatches() {
         $urls = array(self::HTTP_200_URL, self::HTTP_200_URL);
         $clients = new Clients($urls);
-        $responses = 0;
-        while ($clients->next()) $responses++;
+        for ($responses = 0; $clients->next(); $responses++);
         $this->assertEquals(count($urls), $responses);
     }
     
