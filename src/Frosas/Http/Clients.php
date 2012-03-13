@@ -20,7 +20,9 @@ class Clients {
 
     function add($client) {
         if (! $client instanceof Client) $client = new Client($client);
-        $this->connectionsQueued[] = array('client' => $client);
+        $this->connectionsQueued[] = array(
+            'client' => $client,
+            'redirects' => 0);
         $this->fillActiveConnectionsQueue();
         return $client;
     }
@@ -42,9 +44,12 @@ class Clients {
                     $this->connectionsDone[] = $connection;
 
                     $response = $connection['client']->send();
-                    if ($response->isRedirect() && $connection['maxRemainingRedirects']) {
-                        $connection['maxRemainingRedirects']--;
-                        $this->connectionsQueued[] = $connection;
+
+                    if ($response->isRedirect()) {
+                        if ($connection['redirects'] < $connection['config']['maxredirects']) {
+                            $connection['redirects']++;
+                            $this->connectionsQueued[] = $connection;
+                        }
                     }
 
                     $this->fillActiveConnectionsQueue(); // Add another one
@@ -75,10 +80,10 @@ class Clients {
             $client = $connection['client'];
             $client->setAdapter(new Adapter\Writer);
 
-            if (! array_key_exists('maxRemainingRedirects', $connection)) {
-                // This should be in add() but until now we weren't sure whether the client had an 
-                // adapter (needed by clientMaxRedirects())
-                $connection['maxRemainingRedirects'] = $this->clientMaxRedirects($client);
+            if (! array_key_exists('config', $connection)) {
+                // This should be in add() but until now we can't be sure the client has an 
+                // adapter (needed as we can't get the config straight from the client)
+                $connection['config'] = $client->getAdapter()->getConfig();
             }
 
             $client->send();
@@ -92,12 +97,5 @@ class Clients {
 
             $this->connectionsActive[(int) $socket] = $connection;
         }
-    }
-
-    private function clientMaxRedirects(Client $client) {
-        // There is no way to get the config from the Client itself but the one in its adapter 
-        // should be the same
-        $config = $client->getAdapter()->getConfig();
-        return $config['maxredirects'];
     }
 }
