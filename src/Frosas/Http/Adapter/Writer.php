@@ -11,7 +11,7 @@ class Writer extends \Zend\Http\Client\Adapter\Socket {
 
     function write($method, $uri, $http_ver = '1.1', $headers = array(), $body = '') {
         $this->rawRequest = parent::write($method, $uri, $http_ver, $headers, $body);
-        return 'GET / HTTP/1.0'; // Fake request
+        return $this->rawRequest;
     }
 
     function read() {
