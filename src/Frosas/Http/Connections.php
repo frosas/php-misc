@@ -4,22 +4,24 @@ namespace Frosas\Http;
 
 class Connections implements \Countable {
 
+    // TODO Make it private
+    public $current;
+
     private $connections = array();
-    
+    private $lastResponded;
+
     /**
      * Buffer of already responded connections
      */
     private $respondedConnections = array();
-    
-    function add($socket, $request) {
-        stream_set_blocking($socket, 0);
-        $this->connections[(int) $socket] = array(
-            'socket' => $socket,
-            'request' => $request,
-            'response' => '');
+
+    function addCurrent() {
+        $id = (int) $this->current['socket'];
+        $this->connections[$id] = $this->current + array('rawResponse' => '');
+        $this->current = null;
     }
     
-    function getNextResponded() {
+    function waitForNextResponse() {
         while ($this->connections && ! $this->respondedConnections) {
             $sockets = $this->getSockets();
             $null = null;
@@ -29,7 +31,7 @@ class Connections implements \Countable {
                 $connection =& $this->connections[(int) $socket];
                 $data = stream_get_contents($socket);
                 // TODO $data === false is an error
-                $connection['response'] .= $data;
+                $connection['rawResponse'] .= $data;
                 if ($data === '') { // End of response
                     unset($this->connections[(int) $socket]);
                     $this->respondedConnections[] = $connection;
@@ -37,11 +39,15 @@ class Connections implements \Countable {
             }
         }
         
-        return array_shift($this->respondedConnections);
+        $this->lastResponded = array_shift($this->respondedConnections);
     }
 
     function count() {
         return count($this->connections);
+    }
+
+    function getLastResponded() {
+        return $this->lastResponded;
     }
     
     private function getSockets() {

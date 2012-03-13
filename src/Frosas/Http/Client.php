@@ -15,11 +15,20 @@ class Client extends \Zend\Http\Client {
         
         $this->connections = new Connections;
         
-        // This client acts as the writer client
+        // The writer client is this class itself
         $this->setAdapter(new Adapter\Writer($this->connections));
         
+        // TODO Handle redirections
         $this->readerClient = new \Zend\Http\Client;
         $this->readerClient->setAdapter(new Adapter\Reader($this->connections));
+    }
+
+    function send(\Zend\Http\Request $request = null) {
+        $request = $request ?: clone $this->getRequest();
+        $this->connections->current = array('request' => $request);
+        $response = parent::send($request);
+        $this->connections->current['response'] = $response;
+        return $response;
     }
     
     /**
@@ -31,7 +40,8 @@ class Client extends \Zend\Http\Client {
             // TODO Handle connection exceptions (e.g. "Zend\Http\Exception\RuntimeException: 
             // Unable to read response, or response is empty")
             $this->readerClient->send();
-            $this->setRequest($this->readerClient->getRequest());
+            $connection = $this->connections->getLastResponded();
+            $this->setRequest($connection['request']);
             $this->setResponse($this->readerClient->getResponse());
             // TODO Set raw request and response
             return $this->getResponse();

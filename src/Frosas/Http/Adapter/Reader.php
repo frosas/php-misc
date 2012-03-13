@@ -8,7 +8,6 @@ namespace Frosas\Http\Adapter;
 class Reader implements \Zend\Http\Client\Adapter {
 
     private $connections;
-    private $lastRespondedConnection;
     
     function __construct(\Frosas\Http\Connections $connections) {
         $this->connections = $connections;
@@ -23,13 +22,13 @@ class Reader implements \Zend\Http\Client\Adapter {
     }
     
     function write($method, $url, $httpVersion = '1.1', $headers = array(), $body = '') {
-        // Get the next responded connection, whichever it is
-        $this->lastRespondedConnection = $this->connections->getNextResponded();
-        return $this->lastRespondedConnection['request'];
+        $connection = $this->connections->waitForNextResponse();
+        return $connection['rawRequest'];
     }
     
     function read() {
-        return $this->lastRespondedConnection['response'];
+        $connection = $this->connections->getLastResponded();
+        return $connection['rawResponse'];
     }
     
     function close() {

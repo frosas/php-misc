@@ -17,9 +17,13 @@ class Writer extends \Zend\Http\Client\Adapter\Socket {
     }
     
     function write($method, $url, $httpVersion = '1.1', $headers = array(), $body = '') {
-        $request = parent::write($method, $url, $httpVersion, $headers, $body);
-        $this->connections->add($this->socket, $request);
-        return $request;
+        $rawRequest = parent::write($method, $url, $httpVersion, $headers, $body);
+        stream_set_blocking($this->socket, 0);
+        $this->connections->current = $this->connections->current + array(
+            'socket' => $this->socket,
+            'rawRequest' => $rawRequest);
+        $this->connections->addCurrent();
+        return $rawRequest;
     }
     
     function read() {
