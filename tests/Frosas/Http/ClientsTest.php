@@ -48,6 +48,8 @@ class ClientsTest extends \PHPUnit_Framework_TestCase {
         $response = $clients->next()->getResponse();
         $this->assertTrue($response->isRedirect());
     }
+
+    // TODO Test timeouts
     
     private function assertIsHtml($string) {
         $this->assertTrue(

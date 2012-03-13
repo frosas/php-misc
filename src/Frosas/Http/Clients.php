@@ -29,36 +29,16 @@ class Clients {
 
     function next() {
         while ($this->connectionsActive && ! $this->connectionsDone) {
-            $sockets = $this->sockets();
+            $sockets = $readableSockets = $this->sockets();
             $null = null;
-            // TODO Handle timeouts
-            stream_select($sockets, $null, $null, 9999);
-            foreach ($sockets as $socket) {
-                $connection = $this->connectionsActive[(int) $socket];
-                $client = $connection['client'];
-                $data = stream_get_contents($socket);
-                if ($data === false) throw new \Exception;
-                $client->getAdapter()->appendToResponse($data);
-                if ($data === '') { // End of response
-                    unset($this->connectionsActive[(int) $socket]);
-                    $this->connectionsDone[] = $connection;
-
-                    $response = $connection['client']->send();
-
-                    if ($response->isRedirect()) {
-                        if ($connection['redirects'] < $connection['config']['maxredirects']) {
-                            $connection['redirects']++;
-                            $this->connectionsQueued[] = $connection;
-                        }
-                    }
-
-                    $this->fillActiveConnectionsQueue(); // Add another one
-                }
-            }
+            stream_select($readableSockets, $null, $null, $this->activeConnectionsMinTimeout());
+            $this->timeOutConnections(array_diff($sockets, $readableSockets));
+            $this->readConnections($readableSockets);
         }
         
         if ($connection = array_shift($this->connectionsDone)) {
-            return $connection['client'];
+            return isset($connection['exception']) ? 
+                $connection['exception'] : $connection['client'];
         }
     }
 
@@ -96,6 +76,51 @@ class Clients {
             $client->setAdapter(new Adapter\Reader($rawRequest));
 
             $this->connectionsActive[(int) $socket] = $connection;
+        }
+    }
+
+    private function activeConnectionsMinTimeout() {
+        return min(array_map(function($connection) {
+            return $connection['config']['timeout'];
+        }, $this->connectionsActive));
+    }
+
+    private function timeOutConnections(array $potentiallyTimedOutSockets) {
+        foreach ($potentiallyTimedOutSockets as $socket) {
+            $metadata = stream_get_meta_data($socket);
+            if ($metadata['timed_out']) {
+                $connection = $this->connectionsActive[(int) $socket];
+                $connection['exception'] = new Client\Exception($connection['client'],
+                    new \Zend\Http\Client\Adapter\Exception\TimeoutException);
+                unset($this->connectionsActive[(int) $socket]);
+                $this->connectionsDone[] = $connection;
+            }
+        }
+    }
+
+    private function readConnections(array $sockets) {
+        foreach ($sockets as $socket) {
+            $connection = $this->connectionsActive[(int) $socket];
+            $client = $connection['client'];
+            $data = stream_get_contents($socket);
+            if ($data === false) throw new \Exception;
+            $client->getAdapter()->appendToResponse($data);
+            if ($data === '') { // End of response
+                unset($this->connectionsActive[(int) $socket]);
+                $this->connectionsDone[] = $connection;
+                $response = $connection['client']->send();
+                $this->handleRedirections($connection);
+                $this->fillActiveConnectionsQueue(); // Add another one
+            }
+        }
+    }
+
+    private function handleRedirections(array $connection) {
+        if ($connection['client']->getResponse()->isRedirect()) {
+            if ($connection['redirects'] < $connection['config']['maxredirects']) {
+                $connection['redirects']++;
+                $this->connectionsQueued[] = $connection;
+            }
         }
     }
 }
