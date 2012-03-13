@@ -7,12 +7,13 @@ namespace Frosas\Http\Adapter;
  */
 class Reader implements \Zend\Http\Client\Adapter {
 
-    private $connections;
-    
-    function __construct(\Frosas\Http\Connections $connections) {
-        $this->connections = $connections;
+    private $rawRequest;
+    private $rawResponse = '';
+
+    function __construct($rawRequest) {
+        $this->rawRequest = $rawRequest;
     }
-    
+
     function setConfig($config = array()) {
         // Not needed
     }
@@ -22,16 +23,18 @@ class Reader implements \Zend\Http\Client\Adapter {
     }
     
     function write($method, $url, $httpVersion = '1.1', $headers = array(), $body = '') {
-        $connection = $this->connections->waitForNextResponse();
-        return $connection['rawRequest'];
+        return $this->rawRequest;
     }
     
     function read() {
-        $connection = $this->connections->getLastResponded();
-        return $connection['rawResponse'];
+        return $this->rawResponse;
     }
     
     function close() {
         // Not needed
+    }
+
+    function appendToResponse($data) {
+        $this->rawResponse .= $data;
     }
 }

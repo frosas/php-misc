@@ -9,23 +9,11 @@ namespace Frosas\Http\Adapter;
  */
 class Writer extends \Zend\Http\Client\Adapter\Socket {
 
-    private $connections;
-    
-    function __construct(\Frosas\Http\Connections $connections) {
-        parent::__construct();
-        $this->connections = $connections;
+    function write($method, $uri, $http_ver = '1.1', $headers = array(), $body = '') {
+        $this->rawRequest = parent::write($method, $uri, $http_ver, $headers, $body);
+        return 'GET / HTTP/1.0'; // Fake request
     }
-    
-    function write($method, $url, $httpVersion = '1.1', $headers = array(), $body = '') {
-        $rawRequest = parent::write($method, $url, $httpVersion, $headers, $body);
-        stream_set_blocking($this->socket, 0);
-        $this->connections->current = $this->connections->current + array(
-            'socket' => $this->socket,
-            'rawRequest' => $rawRequest);
-        $this->connections->addCurrent();
-        return $rawRequest;
-    }
-    
+
     function read() {
         // Zend Client requires an actual response but we can't give it to him yet!
         // TODO Avoid getting this fake response when using Frosas\Client (throw 
@@ -35,5 +23,13 @@ class Writer extends \Zend\Http\Client\Adapter\Socket {
     
     function close() {
         // We don't want to close the connection yet
+    }
+
+    function socket() {
+        return $this->socket;
+    }
+
+    function rawRequest() {
+        return $this->rawRequest;
     }
 }
