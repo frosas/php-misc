@@ -5,13 +5,12 @@ namespace Frosas\Http;
 /**
  * TODO Don't be a Zend Client but composite it instead?
  */
-class Client extends \Zend\Http\Client
-{
+class Client extends \Zend\Http\Client {
+
     private $connections;
     private $readerClient;
     
-    function __construct($uri = null, $config = null)
-    {
+    function __construct($uri = null, $config = null) {
         parent::__construct($uri, $config);
         
         $this->connections = new Connections;
@@ -27,8 +26,7 @@ class Client extends \Zend\Http\Client
      * @return \Zend\Http\Response|Exception|null The response, an exception or null if there are 
      * no more pending responses
      */
-    function updateToNextResponse()
-    {
+    function updateToNextResponse() {
         if (count($this->connections)) {
             // TODO Handle connection exceptions (e.g. "Zend\Http\Exception\RuntimeException: 
             // Unable to read response, or response is empty")

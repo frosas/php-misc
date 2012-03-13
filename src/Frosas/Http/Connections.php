@@ -2,8 +2,8 @@
 
 namespace Frosas\Http;
 
-class Connections implements \Countable
-{
+class Connections implements \Countable {
+
     private $connections = array();
     
     /**
@@ -11,8 +11,7 @@ class Connections implements \Countable
      */
     private $respondedConnections = array();
     
-    function add($socket, $request)
-    {
+    function add($socket, $request) {
         stream_set_blocking($socket, 0);
         $this->connections[(int) $socket] = array(
             'socket' => $socket,
@@ -20,8 +19,7 @@ class Connections implements \Countable
             'response' => '');
     }
     
-    function getNextResponded()
-    {
+    function getNextResponded() {
         while ($this->connections && ! $this->respondedConnections) {
             $sockets = $this->getSockets();
             $null = null;
@@ -42,13 +40,11 @@ class Connections implements \Countable
         return array_shift($this->respondedConnections);
     }
 
-    function count()
-    {
+    function count() {
         return count($this->connections);
     }
     
-    private function getSockets()
-    {
+    private function getSockets() {
         return array_map(function($connection) {
             return $connection['socket'];
         }, $this->connections);        
