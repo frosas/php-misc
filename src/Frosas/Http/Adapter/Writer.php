@@ -16,13 +16,12 @@ class Writer extends \Zend\Http\Client\Adapter\Socket {
 
     function read() {
         // Zend Client requires an actual response but we can't give it to him yet!
-        // TODO Avoid getting this fake response when using Frosas\Client (throw 
-        // an exception or something)
+        // TODO How to avoid the user to get this fake response?
         return "HTTP/1.1 200 OK\n\nThis is a fake response!";
     }
     
     function close() {
-        // We don't want to close the connection yet
+        // TODO When to close the connection?
     }
 
     function socket() {
