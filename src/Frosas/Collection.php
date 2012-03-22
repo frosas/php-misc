@@ -2,26 +2,42 @@
 
 namespace Frosas;
 
-class Collection {
+/**
+ * Handy methods for collections (arrays, iterators and other traversable structures)
+ */
+final class Collection {
 
-    static function map($collection, \Closure $closure) {
-        foreach ($collection as $key => & $value) {
-            $value = $closure($value, $key);
+    /**
+     * @param Traversable $traversable
+     * @return array
+     */
+    static function map($traversable, \Closure $closure) {
+        $mapped = array();
+        foreach ($traversable as $key => & $value) {
+            $mapped[$key] = $closure($value, $key);
         }
-        return $collection;
+        return $mapped;
     }
 
-    static function mapKeys($collection, \Closure $closure) {
+    /**
+     * @param Traversable $traversable
+     * @return array
+     */
+    static function mapKeys($traversable, \Closure $closure) {
         $mapped = array();
-        foreach ($collection as $key => $value) {
+        foreach ($traversable as $key => $value) {
             $mapped[$closure($value, $key)] = $value;
         }
         return $mapped;
     }
 
-    static function filter($collection, \Closure $closure) {
+    /**
+     * @param Traversable $traversable
+     * @return array
+     */
+    static function filter($traversable, \Closure $closure) {
         $filtered = array();
-        foreach ($collection as $key => $value) {
+        foreach ($traversable as $key => $value) {
             if ($closure($value, $key)) {
                 $filtered[$key] = $value;
             }
@@ -29,17 +45,31 @@ class Collection {
         return $filtered;
     }
 
-    static function first($collection) {
-        foreach ($collection as $value) return $value;
+    /**
+     * @param Traversable $traversable
+     * @return mixed The first element
+     * @throws NotFoundException If $traversable has no elements
+     */
+    static function first($traversable) {
+        foreach ($traversable as $value) return $value;
         throw new NotFoundException;
     }
 
-    static function last($collection) {
-        foreach ($collection as $value);
+    /**
+     * @param Traversable $traversable
+     * @return mixed The last element
+     * @throws NotFoundException If $traversable has no elements
+     */
+    static function last($traversable) {
+        foreach ($traversable as $value);
         if (! isset($value) && $value !== null) throw new NotFoundException;
         return $value;
     }
 
+    /**
+     * @param mixed $collection
+     * @return Collection\Wrapper A wrapper on $collection that allows method chaining
+     */
     static function wrap($collection) {
         return new Collection\Wrapper($collection);
     }
