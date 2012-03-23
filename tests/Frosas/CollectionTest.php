@@ -36,6 +36,15 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    function testDiff() {
+        $this->assertEquals(array(1 => 2, 2 => 3), Collection::diff(array(1, 2, 3), array(1)));
+    }
+
+    function testContains() {
+        $this->assertTrue(Collection::contains(array(1, 2, 3), 1));
+        $this->assertTrue(! Collection::contains(array(1, 2, 3), 4));
+    }
+
     function testFirst() {
         $this->assertEquals(1, Collection::first(array(1, 2, 3)));
     }

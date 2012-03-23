@@ -46,6 +46,30 @@ final class Collection {
     }
 
     /**
+     * An array_diff() with strict comparison
+     * 
+     * @param Traversable $traversable
+     * @param Traversable $traversable2
+     * @return array The elements in $traversable not in $traversable2
+     */
+    static function diff($traversable, $traversable2) {
+        return static::filter($traversable, function($value) use ($traversable2) {
+            return ! Collection::contains($traversable2, $value);
+        });
+    }
+
+    /**
+     * @param Traversable $traversable
+     * @param mixed $value
+     * @return boolean Whether $traversable contains $value (strict comparison)
+     */
+    static function contains($traversable, $value) {
+        foreach ($traversable as $value2) {
+            if ($value2 === $value) return true;
+        }
+    }
+
+    /**
      * @param Traversable $traversable
      * @return mixed The first element
      * @throws NotFoundException If $traversable has no elements
