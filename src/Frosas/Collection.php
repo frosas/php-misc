@@ -35,7 +35,8 @@ final class Collection {
      * @param Traversable $traversable
      * @return array
      */
-    static function filter($traversable, \Closure $closure) {
+    static function filter($traversable, \Closure $closure = null) {
+        if (! $closure) $closure = function($value) { return $value; };
         $filtered = array();
         foreach ($traversable as $key => $value) {
             if ($closure($value, $key)) {

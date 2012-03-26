@@ -35,6 +35,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
             })
         );
     }
+    
+    function testFilterWithNoClosure() {
+        $this->assertEquals(array('a', 1), Collection::filter(array('a', 1, 0, '', null)));
+    }
 
     function testDiff() {
         $this->assertEquals(array(1 => 2, 2 => 3), Collection::diff(array(1, 2, 3), array(1)));
