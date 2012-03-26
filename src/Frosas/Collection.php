@@ -79,6 +79,36 @@ final class Collection {
         }
         return $uniques;
     }
+    
+    /**
+     * An asort() that works with any value 
+     * 
+     * Sorting type is SORT_STRING. Keys are maintained.
+     * 
+     * @param Traversable $traversable
+     * @param \Closure $elementToString Returns the value that is actually used to do the sorting.
+     *                                  The value itself is used by default.
+     * @return array The $traversable as a sorted array
+     */
+    static function sort($traversable, \Closure $elementToString = null) {
+        if (! $elementToString) $elementToString = function ($value) { return $value; };
+        
+        $elementsByString = array();
+        foreach ($traversable as $key => $value) {
+            $elementsByString[$elementToString($value, $key)][] = array($key, $value);
+        }
+        
+        if (! ksort($elementsByString, SORT_STRING)) throw new \InvalidArgumentException;
+        
+        $sorted = array();
+        foreach ($elementsByString as $elementsWithSameString) {
+            foreach ($elementsWithSameString as $keyAndValue) {
+                list($key, $value) = $keyAndValue;
+                $sorted[$key] = $value;
+            }
+        }
+        return $sorted;
+    }
 
     /**
      * @param Traversable $traversable

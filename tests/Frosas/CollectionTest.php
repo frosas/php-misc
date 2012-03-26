@@ -52,6 +52,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
     function testUnique() {
         $this->assertEquals(array(1, 2, 3, true, 5 => '3'), Collection::unique(array(1, 2, 3, true, 2, '3')));
     }
+    
+    function testSort() {
+        $this->assertEquals(
+            array(2 => 1, 0 => '2', 1 => 3),
+            Collection::sort(array('2', 3, 1)));
+    }
+    
+    function testSortWithClosure() {
+        $this->assertEquals(
+            array(1 => array(), 0 => array(1), 2 => array(1, 1)),
+            Collection::sort(array(array(1), array(), array(1, 1)), function($array) {
+                return count($array);
+            })
+        );
+    }
 
     function testFirst() {
         $this->assertEquals(1, Collection::first(array(1, 2, 3)));
