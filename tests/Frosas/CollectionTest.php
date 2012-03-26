@@ -48,6 +48,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue(Collection::contains(array(1, 2, 3), 1));
         $this->assertTrue(! Collection::contains(array(1, 2, 3), 4));
     }
+    
+    function testUnique() {
+        $this->assertEquals(array(1, 2, 3, true, 5 => '3'), Collection::unique(array(1, 2, 3, true, 2, '3')));
+    }
 
     function testFirst() {
         $this->assertEquals(1, Collection::first(array(1, 2, 3)));

@@ -69,6 +69,16 @@ final class Collection {
             if ($value2 === $value) return true;
         }
     }
+    
+    static function unique($traversable) {
+        $uniques = array();
+        foreach ($traversable as $key => $value) {
+            if (! static::contains($uniques, $value)) {
+                $uniques[$key] = $value;
+            }
+        }
+        return $uniques;
+    }
 
     /**
      * @param Traversable $traversable
