@@ -124,12 +124,13 @@ final class Collection {
      */
     static function first($traversable, $options = array()) {
         if ($options instanceof \Closure) $options = array('condition' => $options);
-        $options += array('condition' => 'static::get');
         
         foreach ($traversable as $value) {
-            if (call_user_func($options['condition'], $value)) {
-                return $value;
+            if (isset($options['condition']) && ! call_user_func($options['condition'], $value)) {
+                continue;
             }
+            
+            return $value;
         }
         
         if (array_key_exists('fallback', $options)) return $options['fallback'];
