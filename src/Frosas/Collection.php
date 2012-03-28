@@ -9,43 +9,46 @@ final class Collection {
 
     /**
      * @param Traversable $traversable
+     * @param callable $callable
      * @return array
      */
-    static function map($traversable, \Closure $closure) {
+    static function map($traversable, $callable) {
         $mapped = array();
         foreach ($traversable as $key => & $value) {
-            $mapped[$key] = $closure($value, $key);
+            $mapped[$key] = call_user_func($callable, $value, $key);
         }
         return $mapped;
     }
 
     /**
      * @param Traversable $traversable
+     * @param callable $callable
      * @return array
      */
-    static function mapKeys($traversable, \Closure $closure) {
+    static function mapKeys($traversable, $callable) {
         $mapped = array();
         foreach ($traversable as $key => $value) {
-            $mapped[$closure($value, $key)] = $value;
+            $mapped[call_user_func($callable, $value, $key)] = $value;
         }
         return $mapped;
     }
 
     /**
      * @param Traversable $traversable
+     * @param callable $callable
      * @return array
      */
-    static function filter($traversable, \Closure $closure = null) {
-        if (! $closure) $closure = function($value) { return $value; };
+    static function filter($traversable, $callable = null) {
+        if (! $callable) $callable = function($value) { return $value; };
         $filtered = array();
         foreach ($traversable as $key => $value) {
-            if ($closure($value, $key)) {
+            if (call_user_func($callable, $value, $key)) {
                 $filtered[$key] = $value;
             }
         }
         return $filtered;
     }
-
+    
     /**
      * An array_diff() with strict comparison
      * 
@@ -86,16 +89,17 @@ final class Collection {
      * Sorting type is SORT_STRING. Keys are maintained.
      * 
      * @param Traversable $traversable
-     * @param \Closure $elementToString Returns the value that is actually used to do the sorting.
+     * @param callable $elementToString Returns the value that is actually used to do the sorting.
      *                                  The value itself is used by default.
      * @return array The $traversable as a sorted array
      */
-    static function sort($traversable, \Closure $elementToString = null) {
+    static function sort($traversable, $elementToString = null) {
         if (! $elementToString) $elementToString = function ($value) { return $value; };
         
         $elementsByString = array();
         foreach ($traversable as $key => $value) {
-            $elementsByString[$elementToString($value, $key)][] = array($key, $value);
+            $elementString = call_user_func($elementToString, $value, $key);
+            $elementsByString[$elementString][] = array($key, $value);
         }
         
         if (! ksort($elementsByString, SORT_STRING)) throw new \InvalidArgumentException;
