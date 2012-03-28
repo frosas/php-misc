@@ -39,7 +39,7 @@ final class Collection {
      * @return array
      */
     static function filter($traversable, $callable = null) {
-        if (! $callable) $callable = function($value) { return $value; };
+        $callable = $callable ?: 'static::get';
         $filtered = array();
         foreach ($traversable as $key => $value) {
             if (call_user_func($callable, $value, $key)) {
@@ -94,7 +94,7 @@ final class Collection {
      * @return array The $traversable as a sorted array
      */
     static function sort($traversable, $elementToString = null) {
-        if (! $elementToString) $elementToString = function ($value) { return $value; };
+        $elementToString = $elementToString ?: 'static::get';
         
         $elementsByString = array();
         foreach ($traversable as $key => $value) {
@@ -141,5 +141,14 @@ final class Collection {
      */
     static function wrap($collection) {
         return new Collection\Wrapper($collection);
+    }
+
+    /**
+     * Dummy function that simply returns the value itself
+     * 
+     * Used when a callable is optional
+     */
+    private static function get($value) {
+        return $value;  
     }
 }
