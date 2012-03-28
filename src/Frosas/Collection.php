@@ -35,14 +35,14 @@ final class Collection {
 
     /**
      * @param Traversable $traversable
-     * @param callable $callable
+     * @param callable $condition
      * @return array
      */
-    static function filter($traversable, $callable = null) {
-        $callable = $callable ?: 'static::get';
+    static function filter($traversable, $condition = null) {
+        $condition = $condition ?: 'static::get';
         $filtered = array();
         foreach ($traversable as $key => $value) {
-            if (call_user_func($callable, $value, $key)) {
+            if (call_user_func($condition, $value, $key)) {
                 $filtered[$key] = $value;
             }
         }
