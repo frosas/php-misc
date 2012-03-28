@@ -76,12 +76,16 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
         $even = function($value) { return ! ($value % 2); };
         $this->assertEquals(2, Collection::first(array(1, 2, 3), $even));
     }
-
+    
     function testFirstOnEmptyCollection() {
         $this->setExpectedException('Frosas\NotFoundException');
         Collection::first(array());
     }
-
+    
+    function testFirstWithFallback() {
+        $this->assertEquals(null, Collection::first(array(), array('fallback' => null)));
+    }
+    
     function testLast() {
         $this->assertEquals(3, Collection::last(array(1, 2, 3)));
     }

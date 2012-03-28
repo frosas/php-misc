@@ -116,17 +116,23 @@ final class Collection {
 
     /**
      * @param Traversable $traversable
-     * @param callable $condition Only elements complying this condition are taken in account
+     * @param mixed $options Array of options or a condition closure
+     *     - condition: A callable called for every element returning whether is should be taken in account
+     *     - fallback: Value to return if no elements are found
      * @return mixed The first element
-     * @throws NotFoundException If $traversable has no elements
+     * @throws NotFoundException If no elements are found and no fallback is specified
      */
-    static function first($traversable, $condition = null) {
-        $condition = $condition ?: 'static::get';
+    static function first($traversable, $options = array()) {
+        if ($options instanceof \Closure) $options = array('condition' => $options);
+        $options += array('condition' => 'static::get');
+        
         foreach ($traversable as $value) {
-            if (call_user_func($condition, $value)) {
+            if (call_user_func($options['condition'], $value)) {
                 return $value;
             }
         }
+        
+        if (array_key_exists('fallback', $options)) return $options['fallback'];
         throw new NotFoundException;
     }
 
