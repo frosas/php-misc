@@ -116,11 +116,17 @@ final class Collection {
 
     /**
      * @param Traversable $traversable
+     * @param callable $condition Only elements complying this condition are taken in account
      * @return mixed The first element
      * @throws NotFoundException If $traversable has no elements
      */
-    static function first($traversable) {
-        foreach ($traversable as $value) return $value;
+    static function first($traversable, $condition = null) {
+        $condition = $condition ?: 'static::get';
+        foreach ($traversable as $value) {
+            if (call_user_func($condition, $value)) {
+                return $value;
+            }
+        }
         throw new NotFoundException;
     }
 
