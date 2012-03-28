@@ -14,7 +14,7 @@ final class Collection {
      */
     static function map($traversable, $callable) {
         $mapped = array();
-        foreach ($traversable as $key => & $value) {
+        foreach ($traversable as $key => $value) {
             $mapped[$key] = call_user_func($callable, $value, $key);
         }
         return $mapped;
