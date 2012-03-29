@@ -1,6 +1,0 @@
-[submodule "vendor/symfony-classloader"]
-	path = vendor/symfony-classloader
-	url = https://github.com/symfony/ClassLoader.git
-[submodule "vendor/zend-framework-2"]
-	path = vendor/zend-framework-2
-	url = https://github.com/zendframework/zf2.git

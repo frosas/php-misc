@@ -3,7 +3,7 @@
 
 namespace Frosas\Collection;
 
-require __DIR__ . '/../tests/bootstrap.php';
+require __DIR__ . '/../vendor/.composer/autoload.php';
 
 use Frosas\Collection;
 

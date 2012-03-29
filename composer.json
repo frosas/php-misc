@@ -1,0 +1,35 @@
+{
+    "name": "frosas/php",
+    "description": "Some utils for PHP (async HTTP client, collections manipulation, ...)",
+    "authors": [
+        {
+            "name": "Francesc Rosàs",
+            "email": "francescrosasbosque@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "suggest": {
+        "zend/zend-framework": "2.*"
+    },
+    "autoload": {
+        "psr-0": { "Frosas": "src" }
+    },
+    "repositories": {
+        "zend/zend-framework": {
+            "type": "package",
+            "package": {
+                "name": "zend/zend-framework",
+                "version": "2.0.0beta3",
+                "dist": {
+                    "url": "http://packages.zendframework.com/releases/ZendFramework-2.0.0beta3/ZendFramework-2.0.0beta3-minimal.tgz",
+                    "type": "zip"
+                },
+                "autoload": {
+                    "psr-0": { "Zend": "library" }
+                }
+            }
+        }
+    }
+}
