@@ -117,13 +117,15 @@ final class Collection {
     /**
      * @param Traversable $traversable
      * @param mixed $options Array of options or a condition closure
-     *     - condition: A callable called for every element returning whether is should be taken in account
-     *     - fallback: Value to return if no elements are found
-     * @return mixed The first element
-     * @throws NotFoundException If no elements are found and no fallback is specified
+     *     - condition: A callable called for every element returning whether it should be taken in account
+     *     - default: What to do when no element is found. 'null' (default) to return null or 
+     *       'exception' to throw an exception.
+     * @return mixed The first element or null if $options['default'] == 'null'
+     * @throws NotFoundException If no elements are found and $options['default'] == 'exception'
      */
     static function first($traversable, $options = array()) {
         if ($options instanceof \Closure) $options = array('condition' => $options);
+        $options += array('default' => 'null');
         
         foreach ($traversable as $value) {
             if (isset($options['condition']) && ! call_user_func($options['condition'], $value)) {
@@ -133,8 +135,11 @@ final class Collection {
             return $value;
         }
         
-        if (array_key_exists('fallback', $options)) return $options['fallback'];
-        throw new NotFoundException;
+        switch ($options['default']) {
+            case 'null': return null;
+            case 'exception': throw new NotFoundException;
+            default: throw new InvalidArgumentException("Unknown default");
+        }
     }
 
     /**
