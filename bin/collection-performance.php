@@ -71,6 +71,18 @@ class Performance {
         ));
     }
     
+    static function testLast() {
+        $array = self::dummyArray();
+        self::compareTimes(array(
+            'Collection::last()' => function() use ($array) {
+                Collection::last($array);
+            },
+            'end()' => function() use ($array) {
+                end($array);
+            }
+        ));
+    }
+    
     private static function compareTimes(array $closures) {
         
         echo "- " . implode(" vs ", array_keys($closures)) . "\n";
