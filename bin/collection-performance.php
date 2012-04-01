@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 
-namespace Frosas\Collection;
+namespace Frosas\Misc\Collection;
 
 require __DIR__ . '/../vendor/.composer/autoload.php';
 
-use Frosas\Collection;
+use Frosas\Misc\Collection;
 
 class Performance {
 

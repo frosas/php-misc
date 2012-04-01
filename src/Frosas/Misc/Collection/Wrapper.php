@@ -1,6 +1,6 @@
 <?php
 
-namespace Frosas\Collection;
+namespace Frosas\Misc\Collection;
 
 class Wrapper {
 
@@ -12,7 +12,7 @@ class Wrapper {
 
     function __call($method, $args) {
         array_unshift($args, $this->collection);
-        $this->collection = call_user_func_array(array('Frosas\Collection', $method), $args);
+        $this->collection = call_user_func_array(array('Frosas\Misc\Collection', $method), $args);
         return $this;
     }
 

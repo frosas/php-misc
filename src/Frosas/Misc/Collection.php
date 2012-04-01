@@ -1,6 +1,6 @@
 <?php
 
-namespace Frosas;
+namespace Frosas\Misc;
 
 /**
  * Handy methods for collections (arrays, iterators and other traversable structures)

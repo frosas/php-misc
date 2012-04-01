@@ -1,6 +1,6 @@
 <?php
 
-namespace Frosas;
+namespace Frosas\Misc;
 
 class NotFoundException extends \Exception {
 }

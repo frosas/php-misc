@@ -1,12 +1,12 @@
 <?php
 
-namespace Frosas;
+namespace Frosas\Misc;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase {
     
-    function testWrapUnwrap() {
+    function testWrapper() {
         $collection = array(1, 2, 3);
-        $this->assertEquals($collection, Collection::wrap($collection)->unwrap());
+        $this->assertEquals($collection, Collection::wrap($collection)->filter()->unwrap());
     }
 
     function testMap() {
@@ -78,7 +78,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
     }
     
     function testFirstOnEmptyCollection() {
-        $this->setExpectedException('Frosas\NotFoundException');
+        $this->setExpectedException('Frosas\Misc\NotFoundException');
         Collection::first(array());
     }
     
