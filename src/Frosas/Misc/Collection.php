@@ -160,6 +160,19 @@ final class Collection {
     static function wrap($collection) {
         return new Collection\Wrapper($collection);
     }
+    
+    /**
+     * @param Traversable $traversable
+     * @param callable $by
+     * @return array A bi-dimensional array of the elements of $traversable grouped by $by
+     */
+    static function group($traversable, $by) {
+        $grouped = array();
+        foreach ($traversable as $key => $value) {
+            $grouped[$by($value)][$key] = $value;
+        }
+        return $grouped;
+    }
 
     /**
      * Dummy function that simply returns the value itself

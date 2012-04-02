@@ -89,4 +89,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
     function testLast() {
         $this->assertEquals(3, Collection::last(array(1, 2, 3)));
     }
+    
+    function testGroup() {
+        $this->assertEquals(
+            array('odd' => array(1, 2 => 3), 'even' => array(1 => 2)),
+            Collection::group(array(1, 2, 3), function($value) {
+                return $value % 2 ? 'odd' : 'even';
+            })
+        );
+    }
 }
