@@ -12,6 +12,9 @@ class Wrapper {
         $this->collection = $collection;
     }
 
+    /**
+     * @return Wrapper
+     */
     function __call($method, $args) {
         array_unshift($args, $this->collection);
         $this->collection = Callable::call(array('Frosas\Misc\Collection', $method), $args);
@@ -20,5 +23,17 @@ class Wrapper {
 
     function unwrap() {
         return $this->collection;
+    }
+    
+    /**
+     * Applies $callable to the whole collection
+     * 
+     * Example: $wrapped->apply('array_reverse')
+     * 
+     * @return Wrapper
+     */
+    function apply($callable) {
+        $this->collection = Callable::call($callable, array($this->collection));
+        return $this;
     }
 }

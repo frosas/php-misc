@@ -9,4 +9,12 @@ class WrapperTest extends \PHPUnit_Framework_TestCase {
         $this->setExpectedException('Frosas\Misc\Callable\BadCallException');
         $wrapper->unknown();
     }
+    
+    function testApply() {
+        $original = array(1, 2, 3);
+        $reversed = array_reverse($original);
+        
+        $wrapper = new Wrapper($original);
+        $this->assertEquals($reversed, $wrapper->apply('array_reverse')->unwrap());
+    }
 }
