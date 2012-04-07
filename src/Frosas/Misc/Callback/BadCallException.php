@@ -1,6 +1,6 @@
 <?php 
 
-namespace Frosas\Misc\Callable;
+namespace Frosas\Misc\Callback;
 
 class BadCallException extends \Exception {
     

@@ -2,7 +2,7 @@
 
 namespace Frosas\Misc\Collection;
 
-use Frosas\Misc\Callable;
+use Frosas\Misc\Callback;
 
 class Wrapper {
 
@@ -17,7 +17,7 @@ class Wrapper {
      */
     function __call($method, $args) {
         array_unshift($args, $this->collection);
-        $this->collection = Callable::call(array('Frosas\Misc\Collection', $method), $args);
+        $this->collection = Callback::call(array('Frosas\Misc\Collection', $method), $args);
         return $this;
     }
 
@@ -33,7 +33,7 @@ class Wrapper {
      * @return Wrapper
      */
     function apply($callable) {
-        $this->collection = Callable::call($callable, array($this->collection));
+        $this->collection = Callback::call($callable, array($this->collection));
         return $this;
     }
 }
