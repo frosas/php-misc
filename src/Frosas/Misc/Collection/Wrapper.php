@@ -4,7 +4,7 @@ namespace Frosas\Misc\Collection;
 
 use Frosas\Misc\Callback;
 
-class Wrapper {
+class Wrapper implements \IteratorAggregate {
 
     private $collection;
 
@@ -35,5 +35,10 @@ class Wrapper {
     function apply($callable) {
         $this->collection = Callback::call($callable, array($this->collection));
         return $this;
+    }
+    
+    function getIterator()
+    {
+        return new \ArrayIterator($this->collection);
     }
 }

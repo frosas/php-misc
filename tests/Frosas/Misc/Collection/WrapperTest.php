@@ -13,8 +13,15 @@ class WrapperTest extends \PHPUnit_Framework_TestCase {
     function testApply() {
         $original = array(1, 2, 3);
         $reversed = array_reverse($original);
-        
         $wrapper = new Wrapper($original);
         $this->assertEquals($reversed, $wrapper->apply('array_reverse')->unwrap());
+    }
+    
+    function testIterate()
+    {
+        $original = array(1, 2, 3);
+        $iterated = array();
+        foreach (new Wrapper($original) as $value) $iterated[] = $value;
+        $this->assertEquals($original, $iterated);
     }
 }
