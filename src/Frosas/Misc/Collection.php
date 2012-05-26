@@ -173,6 +173,19 @@ final class Collection {
         }
         return $grouped;
     }
+    
+    /**
+     * @see array_reduce
+     */
+    static function reduce($traversable, $reduce, $initial = null) {
+        return array_reduce(self::toArray($traversable), $reduce, $initial);
+    }
+    
+    static function toArray($traversable) {
+        $array = array();
+        foreach ($traversable as $key => & $value) $array[$key] = $value;
+        return $array;
+    }
 
     /**
      * Dummy function that simply returns the value itself
