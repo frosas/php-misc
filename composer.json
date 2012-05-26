@@ -1,6 +1,6 @@
 {
     "name": "frosas/misc",
-    "description": "Some miscelaneous utils (collections manipulation by now)",
+    "description": "Some miscelaneous utils to work with collections, strings, HTML, functions, errors, ...",
     "authors": [
         {
             "name": "Francesc Rosàs",
