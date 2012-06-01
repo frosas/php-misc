@@ -32,6 +32,13 @@ final class Collection {
         }
         return $mapped;
     }
+    
+    static function resetKeys($traversable) {
+        $array = array();
+        $i = 0;
+        foreach ($traversable as $value) $array[$i++] = $value;
+        return $array;
+    }
 
     /**
      * @param Traversable $traversable
