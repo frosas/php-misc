@@ -9,10 +9,10 @@ class Util
      * - Util::get(new Object)->doSomething()
      * - Util::get(clone \DateTime)->add(...)
      *  
-     * @param mixed $object
-     * @return mixed The $object
+     * @param object $object
+     * @return object The $object
      */
-    static function get(\stdClass $object)
+    static function get($object)
     {
         return $object;
     }
