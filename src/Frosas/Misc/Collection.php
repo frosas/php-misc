@@ -8,7 +8,7 @@ namespace Frosas\Misc;
 final class Collection {
 
     /**
-     * @param Traversable $traversable
+     * @param \Traversable $traversable
      * @param callable $callable
      * @return array
      */
@@ -21,7 +21,7 @@ final class Collection {
     }
 
     /**
-     * @param Traversable $traversable
+     * @param \Traversable $traversable
      * @param callable $callable
      * @return array
      */
@@ -41,7 +41,7 @@ final class Collection {
     }
 
     /**
-     * @param Traversable $traversable
+     * @param \Traversable $traversable
      * @param callable $condition
      * @return array
      */
@@ -59,8 +59,8 @@ final class Collection {
     /**
      * An array_diff() with strict comparison
      * 
-     * @param Traversable $traversable
-     * @param Traversable $traversable2
+     * @param \Traversable $traversable
+     * @param \Traversable $traversable2
      * @return array The elements in $traversable not in $traversable2
      */
     static function diff($traversable, $traversable2) {
@@ -70,7 +70,7 @@ final class Collection {
     }
 
     /**
-     * @param Traversable $traversable
+     * @param \Traversable $traversable
      * @param mixed $value
      * @return boolean Whether $traversable contains $value (strict comparison)
      */
@@ -95,7 +95,7 @@ final class Collection {
      * 
      * Sorting type is SORT_STRING. Keys are maintained.
      * 
-     * @param Traversable $traversable
+     * @param \Traversable $traversable
      * @param callable $elementToString Returns the value that is actually used to do the sorting.
      *                                  The value itself is used by default.
      * @return array The $traversable as a sorted array
@@ -122,7 +122,7 @@ final class Collection {
     }
 
     /**
-     * @param Traversable $traversable
+     * @param \Traversable $traversable
      * @param mixed $options Array of options or a condition closure
      *     - condition: A callable called for every element returning whether it should be taken in account
      *     - default: What to do when no element is found. 'null' (default) to return null or 
@@ -145,12 +145,12 @@ final class Collection {
         switch ($options['default']) {
             case 'null': return null;
             case 'exception': throw new NotFoundException;
-            default: throw new InvalidArgumentException("Unknown default");
+            default: throw new \InvalidArgumentException("Unknown default");
         }
     }
 
     /**
-     * @param Traversable $traversable
+     * @param \Traversable $traversable
      * @return mixed The last element
      * @throws NotFoundException If $traversable has no elements
      */
@@ -169,7 +169,7 @@ final class Collection {
     }
     
     /**
-     * @param Traversable $traversable
+     * @param \Traversable $traversable
      * @param callable $by
      * @return array A bi-dimensional array of the elements of $traversable grouped by $by
      */
