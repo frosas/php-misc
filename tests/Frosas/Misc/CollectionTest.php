@@ -98,4 +98,34 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
             })
         );
     }
+
+    function testAny() {
+        $this->assertTrue((boolean) Collection::any(array(1, 2, 3), function($value) {
+            return $value === 2;
+        }));
+
+        $this->assertFalse((boolean) Collection::any(array(1, 2, 3), function($value) {
+            return $value === 4;
+        }));
+    }
+
+    function testAll() {
+        $this->assertTrue((boolean) Collection::all(array(1, 2, 3), function($value) {
+            return $value > 0;
+        }));
+
+        $this->assertFalse((boolean) Collection::all(array(1, 2, 3), function($value) {
+            return $value > 1;
+        }));
+    }
+
+    function testNone() {
+        $this->assertTrue((boolean) Collection::none(array(1, 2, 3), function($value) {
+            return $value > 3;
+        }));
+
+        $this->assertFalse((boolean) Collection::none(array(1, 2, 3), function($value) {
+            return $value > 2;
+        }));
+    }
 }

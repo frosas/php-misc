@@ -125,7 +125,7 @@ final class Collection {
      * @param \Traversable $traversable
      * @param mixed $options Array of options or a condition closure
      *     - condition: A callable called for every element returning whether it should be taken in account
-     *     - default: What to do when no element is found. 'null' (default) to return null or 
+     *     - default: What to do when no element is found. 'null' (default) to return null or
      *       'exception' to throw an exception.
      * @return mixed The first element or null if $options['default'] == 'null'
      * @throws NotFoundException If no elements are found and $options['default'] == 'exception'
@@ -192,6 +192,33 @@ final class Collection {
         $array = array();
         foreach ($traversable as $key => & $value) $array[$key] = $value;
         return $array;
+    }
+
+    /**
+     * @return booleany Whether any item matches $condition
+     */
+    static function any($traversable, $condition) {
+        foreach ($traversable as $key => $value) {
+            if (call_user_func($condition, $value, $key)) return true;
+        }
+    }
+
+    /**
+     * @return booleany Whether all items match $condition
+     */
+    static function all($traversable, $condition) {
+        foreach ($traversable as $key => $value) {
+            if (! call_user_func($condition, $value, $key)) return;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return booleany Whether no item matches $condition
+     */
+    static function none($traversable, $condition) {
+        return ! self::any($traversable, $condition);
     }
 
     /**
