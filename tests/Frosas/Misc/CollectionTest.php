@@ -128,4 +128,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
             return $value > 2;
         }));
     }
+
+    function testCount() {
+        $this->assertEquals(0, Collection::count(array()));
+
+        $this->assertEquals(3, Collection::count(array(1, 2, 3)));
+    }
 }

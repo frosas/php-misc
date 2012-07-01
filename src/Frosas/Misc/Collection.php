@@ -221,6 +221,10 @@ final class Collection {
         return ! self::any($traversable, $condition);
     }
 
+    static function count($traversable) {
+        return count(static::toArray($traversable));
+    }
+
     /**
      * Dummy function that simply returns the value itself
      * 

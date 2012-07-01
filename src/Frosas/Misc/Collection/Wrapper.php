@@ -5,7 +5,7 @@ namespace Frosas\Misc\Collection;
 use Frosas\Misc\Collection;
 use Frosas\Misc\Callback;
 
-class Wrapper implements \IteratorAggregate {
+class Wrapper implements \IteratorAggregate, \Countable {
 
     private $collection;
 
@@ -41,7 +41,11 @@ class Wrapper implements \IteratorAggregate {
     function reduce($reduce, $initial = null) {
         return Collection::reduce($this->collection, $reduce, $initial);
     }
-    
+
+    function count() {
+        return Collection::count($this->collection);
+    }
+
     function getIterator()
     {
         return new \ArrayIterator($this->collection);
