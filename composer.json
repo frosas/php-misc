@@ -1,16 +1,19 @@
 {
     "name": "frosas/misc",
     "description": "Some miscelaneous utils to work with collections, strings, HTML, functions, errors, ...",
-    "authors": [
-        {
-            "name": "Francesc Rosàs",
-            "email": "francescrosasbosque@gmail.com"
-        }
-    ],
+    "authors": [{
+        "name": "Francesc Rosàs",
+        "email": "francescrosasbosque@gmail.com"
+    }],
     "require": {
         "php": ">=5.3.2"
     },
     "autoload": {
         "psr-0": { "Frosas\\Misc": "src" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
     }
 }
