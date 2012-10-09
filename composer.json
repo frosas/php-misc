@@ -1,6 +1,7 @@
 {
     "name": "frosas/misc",
     "description": "Some miscelaneous utils to work with collections, strings, HTML, functions, errors, ...",
+    "license": "MIT",
     "authors": [{
         "name": "Francesc Rosàs",
         "email": "francescrosasbosque@gmail.com"
