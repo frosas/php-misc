@@ -1,6 +1,6 @@
 {
     "name": "frosas/misc",
-    "description": "Some miscelaneous utils to work with collections, strings, HTML, functions, errors, ...",
+    "description": "A bunch of classes and functions to make working with PHP easier",
     "license": "MIT",
     "authors": [{
         "name": "Francesc Rosàs",
