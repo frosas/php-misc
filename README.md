@@ -1,4 +1,4 @@
-A bunch of classes and functions to make working with PHP easier.
+A bunch of classes and functions to make working with PHP easier. Usability is preferred over performance.
 
 # Testing
 
