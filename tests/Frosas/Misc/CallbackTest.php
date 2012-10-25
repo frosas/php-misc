@@ -1,6 +1,6 @@
 <?php 
 
-namespace Frosas\Misc;
+namespace Frosas;
 
 class CallbackTest extends \PHPUnit_Framework_TestCase {
     
@@ -9,7 +9,7 @@ class CallbackTest extends \PHPUnit_Framework_TestCase {
     }
     
     function testCallInvalidCallable() {
-        $this->setExpectedException('Frosas\Misc\Callback\BadCallException');
+        $this->setExpectedException('Frosas\Callback\BadCallException');
         Callback::call('unknown');
     }
 }

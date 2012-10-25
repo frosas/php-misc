@@ -10,7 +10,7 @@
         "php": ">=5.3.2"
     },
     "autoload": {
-        "psr-0": { "Frosas\\Misc": "src" }
+        "psr-0": { "Frosas": "src" }
     },
     "extra": {
         "branch-alias": {

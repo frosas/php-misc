@@ -1,28 +1,31 @@
 <?php
 
-namespace Frosas\Misc\Collection;
+namespace Frosas\Collection;
 
-use Frosas\Misc\Collection;
-use Frosas\Misc\Callback;
+use Frosas\Collection;
+use Frosas\Callback;
 
-class Wrapper implements \IteratorAggregate, \Countable {
-
+class Wrapper implements \IteratorAggregate, \Countable 
+{
     private $collection;
 
-    function __construct($collection) {
+    function __construct($collection) 
+    {
         $this->collection = $collection;
     }
 
     /**
      * @return Wrapper
      */
-    function __call($method, $args) {
+    function __call($method, $args) 
+    {
         array_unshift($args, $this->collection);
-        $this->collection = Callback::call(array('Frosas\Misc\Collection', $method), $args);
+        $this->collection = Callback::call(array('Frosas\Collection', $method), $args);
         return $this;
     }
 
-    function unwrap() {
+    function unwrap() 
+    {
         return $this->collection;
     }
     
@@ -33,16 +36,19 @@ class Wrapper implements \IteratorAggregate, \Countable {
      * 
      * @return Wrapper
      */
-    function apply($callable) {
+    function apply($callable) 
+    {
         $this->collection = Callback::call($callable, array($this->collection));
         return $this;
     }
 
-    function reduce($reduce, $initial = null) {
+    function reduce($reduce, $initial = null) 
+    {
         return Collection::reduce($this->collection, $reduce, $initial);
     }
 
-    function count() {
+    function count() 
+    {
         return Collection::count($this->collection);
     }
 

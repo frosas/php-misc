@@ -1,12 +1,12 @@
 <?php
 
-namespace Frosas\Misc\Collection;
+namespace Frosas\Collection;
 
 class WrapperTest extends \PHPUnit_Framework_TestCase {
     
     function testUnknownMethod() {
         $wrapper = new Wrapper(array(1, 2, 3));
-        $this->setExpectedException('Frosas\Misc\Callback\BadCallException');
+        $this->setExpectedException('Frosas\Callback\BadCallException');
         $wrapper->unknown();
     }
     

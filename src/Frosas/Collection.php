@@ -1,18 +1,19 @@
 <?php
 
-namespace Frosas\Misc;
+namespace Frosas;
 
 /**
  * Handy methods for collections (arrays, iterators and other traversable structures)
  */
-final class Collection {
-
+final class Collection 
+{
     /**
      * @param \Traversable $traversable
      * @param callable $callable
      * @return array
      */
-    static function map($traversable, $callable) {
+    static function map($traversable, $callable) 
+    {
         $mapped = array();
         foreach ($traversable as $key => $value) {
             $mapped[$key] = call_user_func($callable, $value, $key);
@@ -25,7 +26,8 @@ final class Collection {
      * @param callable $callable
      * @return array
      */
-    static function mapKeys($traversable, $callable) {
+    static function mapKeys($traversable, $callable) 
+    {
         $mapped = array();
         foreach ($traversable as $key => $value) {
             $mapped[call_user_func($callable, $value, $key)] = $value;
@@ -33,7 +35,8 @@ final class Collection {
         return $mapped;
     }
     
-    static function resetKeys($traversable) {
+    static function resetKeys($traversable) 
+    {
         $array = array();
         $i = 0;
         foreach ($traversable as $value) $array[$i++] = $value;
@@ -45,7 +48,8 @@ final class Collection {
      * @param callable $condition
      * @return array
      */
-    static function filter($traversable, $condition = null) {
+    static function filter($traversable, $condition = null) 
+    {
         $condition = $condition ?: 'static::get';
         $filtered = array();
         foreach ($traversable as $key => $value) {
@@ -63,7 +67,8 @@ final class Collection {
      * @param \Traversable $traversable2
      * @return array The elements in $traversable not in $traversable2
      */
-    static function diff($traversable, $traversable2) {
+    static function diff($traversable, $traversable2) 
+    {
         return static::filter($traversable, function($value) use ($traversable2) {
             return ! Collection::contains($traversable2, $value);
         });
@@ -74,13 +79,15 @@ final class Collection {
      * @param mixed $value
      * @return boolean Whether $traversable contains $value (strict comparison)
      */
-    static function contains($traversable, $value) {
+    static function contains($traversable, $value) 
+    {
         foreach ($traversable as $value2) {
             if ($value2 === $value) return true;
         }
     }
     
-    static function unique($traversable) {
+    static function unique($traversable) 
+    {
         $uniques = array();
         foreach ($traversable as $key => $value) {
             if (! static::contains($uniques, $value)) {
@@ -100,7 +107,8 @@ final class Collection {
      *                                  The value itself is used by default.
      * @return array The $traversable as a sorted array
      */
-    static function sort($traversable, $elementToString = null) {
+    static function sort($traversable, $elementToString = null) 
+    {
         $elementToString = $elementToString ?: 'static::get';
         
         $elementsByString = array();
@@ -130,7 +138,8 @@ final class Collection {
      * @return mixed The first element or null if $options['default'] == 'null'
      * @throws NotFoundException If no elements are found and $options['default'] == 'exception'
      */
-    static function first($traversable, $options = array()) {
+    static function first($traversable, $options = array()) 
+    {
         if ($options instanceof \Closure) $options = array('condition' => $options);
         $options += array('default' => 'null');
         
@@ -154,7 +163,8 @@ final class Collection {
      * @return mixed The last element
      * @throws NotFoundException If $traversable has no elements
      */
-    static function last($traversable) {
+    static function last($traversable) 
+    {
         foreach ($traversable as $value);
         if (! isset($value) && $value !== null) throw new NotFoundException;
         return $value;
@@ -164,7 +174,8 @@ final class Collection {
      * @param mixed $collection
      * @return Collection\Wrapper A wrapper on $collection that allows method chaining
      */
-    static function wrap($collection) {
+    static function wrap($collection) 
+    {
         return new Collection\Wrapper($collection);
     }
     
@@ -173,7 +184,8 @@ final class Collection {
      * @param callable $by
      * @return array A bi-dimensional array of the elements of $traversable grouped by $by
      */
-    static function group($traversable, $by) {
+    static function group($traversable, $by) 
+    {
         $grouped = array();
         foreach ($traversable as $key => $value) {
             $grouped[$by($value)][$key] = $value;
@@ -184,11 +196,13 @@ final class Collection {
     /**
      * @see array_reduce
      */
-    static function reduce($traversable, $reduce, $initial = null) {
+    static function reduce($traversable, $reduce, $initial = null) 
+    {
         return array_reduce(self::toArray($traversable), $reduce, $initial);
     }
     
-    static function toArray($traversable) {
+    static function toArray($traversable) 
+    {
         $array = array();
         foreach ($traversable as $key => & $value) $array[$key] = $value;
         return $array;
@@ -197,7 +211,8 @@ final class Collection {
     /**
      * @return booleany Whether any item matches $condition
      */
-    static function any($traversable, $condition) {
+    static function any($traversable, $condition) 
+    {
         foreach ($traversable as $key => $value) {
             if (call_user_func($condition, $value, $key)) return true;
         }
@@ -206,7 +221,8 @@ final class Collection {
     /**
      * @return booleany Whether all items match $condition
      */
-    static function all($traversable, $condition) {
+    static function all($traversable, $condition) 
+    {
         foreach ($traversable as $key => $value) {
             if (! call_user_func($condition, $value, $key)) return;
         }
@@ -217,11 +233,13 @@ final class Collection {
     /**
      * @return booleany Whether no item matches $condition
      */
-    static function none($traversable, $condition) {
+    static function none($traversable, $condition) 
+    {
         return ! self::any($traversable, $condition);
     }
 
-    static function count($traversable) {
+    static function count($traversable) 
+    {
         return count(static::toArray($traversable));
     }
 
@@ -230,7 +248,8 @@ final class Collection {
      * 
      * Used when a callable is optional
      */
-    private static function get($value) {
+    private static function get($value) 
+    {
         return $value;  
     }
 }

@@ -1,20 +1,21 @@
 <?php
 
-namespace Frosas\Misc;
+namespace Frosas;
 
 /**
  * Utilities around callables
  * 
  * It should be called Callable or Function but these are reserved words
  */
-class Callback {
-    
+class Callback 
+{
     /**
      * Like call_user_func_array() but throwing exceptions on bad calls
      * 
      * @throws Callback\BadCallException
      */
-    static function call($callable, $args = array()) {
+    static function call($callable, $args = array()) 
+    {
         $result = @call_user_func_array($callable, $args);
         
         // null is also a possible error result (https://bugs.php.net/bug.php?id=47554)

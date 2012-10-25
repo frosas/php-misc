@@ -1,6 +1,6 @@
 <?php 
 
-namespace Frosas\Misc;
+namespace Frosas;
 
 class ErrorTest extends \PHPUnit_Framework_TestCase {
     

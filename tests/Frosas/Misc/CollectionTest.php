@@ -1,6 +1,6 @@
 <?php
 
-namespace Frosas\Misc;
+namespace Frosas;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase {
     
@@ -82,7 +82,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
     }
     
     function testFirstWithFallback() {
-        $this->setExpectedException('Frosas\Misc\NotFoundException');
+        $this->setExpectedException('Frosas\NotFoundException');
         Collection::first(array(), array('default' => 'exception'));
     }
     

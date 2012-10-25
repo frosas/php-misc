@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 
-namespace Frosas\Misc\Collection;
+namespace Frosas\Collection;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Frosas\Misc\Collection;
+use Frosas\Collection;
 
 class Performance {
 
@@ -130,6 +130,6 @@ class Performance {
     }
 }
 
-foreach (get_class_methods('Frosas\Misc\Collection\Performance') as $method) {
-    call_user_func("Frosas\Misc\Collection\Performance::$method");
+foreach (get_class_methods('Frosas\Collection\Performance') as $method) {
+    call_user_func("Frosas\Collection\Performance::$method");
 }
