@@ -9,11 +9,11 @@ class Reflection
 {
     static function getFunctionCode($function)
     {
-        $r = new ReflectionFunction($function);
+        $reflection = new ReflectionFunction($function);
         $code = '';
-        foreach (new SplFileObject($r->getFileName()) as $line => $string) {
-            if ($line < $r->getStartLine() - 1) continue;
-            if ($line == $r->getEndLine()) break;
+        foreach (new SplFileObject($reflection->getFileName()) as $line => $string) {
+            if ($line < $reflection->getStartLine() - 1) continue;
+            if ($line == $reflection->getEndLine()) break;
             $code .= $string;
         }
         return static::unindent($code);
