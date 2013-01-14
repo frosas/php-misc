@@ -7,6 +7,9 @@ namespace Frosas;
  */
 final class Collection 
 {
+    const DEFAULT_NULL = 'null';
+    const DEFAULT_EXCEPTION = 'exception';
+
     /**
      * @param \Traversable $traversable
      * @param callable $callable
@@ -141,7 +144,7 @@ final class Collection
     static function first($traversable, $options = array()) 
     {
         if ($options instanceof \Closure) $options = array('condition' => $options);
-        $options += array('default' => 'null');
+        $options += array('default' => static::DEFAULT_NULL);
         
         foreach ($traversable as $value) {
             if (isset($options['condition']) && ! call_user_func($options['condition'], $value)) {
@@ -152,8 +155,8 @@ final class Collection
         }
         
         switch ($options['default']) {
-            case 'null': return null;
-            case 'exception': throw new NotFoundException;
+            case static::DEFAULT_NULL: return null;
+            case static::DEFAULT_EXCEPTION: throw new NotFoundException;
             default: throw new \InvalidArgumentException("Unknown default");
         }
     }
