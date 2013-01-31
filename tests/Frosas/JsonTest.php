@@ -11,11 +11,6 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($original, json_decode($json));
     }
 
-    function testEncodeThrowsInvalidArgumentException()
-    {
-        $this->markTestIncomplete("How to test it?");
-    }
-
     function testFailEncodingRecursiveArray()
     {
         $this->setExpectedException('PHPUnit_Framework_Error_Warning');
