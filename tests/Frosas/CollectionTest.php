@@ -2,14 +2,16 @@
 
 namespace Frosas;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase {
-    
-    function testWrapper() {
+class CollectionTest extends \PHPUnit_Framework_TestCase
+{
+    function testWrapper()
+    {
         $collection = array(1, 2, 3);
         $this->assertEquals($collection, Collection::wrap($collection)->filter()->unwrap());
     }
 
-    function testMap() {
+    function testMap()
+    {
         $this->assertEquals(
             array(2, 4, 6), 
             Collection::map(array(1, 2, 3), function($value) {
@@ -18,7 +20,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    function testMapKeys() {
+    function testMapKeys()
+    {
         $this->assertEquals(
             array(0 => 1, 2 => 2, 4 => 3),
             Collection::mapKeys(array(1, 2, 3), function($value, $key) {
@@ -27,7 +30,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    function testFilter() {
+    function testFilter()
+    {
         $this->assertEquals(
             array(1 => 2), 
             Collection::filter(array(1, 2, 3), function($value, $key) {
@@ -36,30 +40,36 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
         );
     }
     
-    function testFilterWithNoClosure() {
+    function testFilterWithNoClosure()
+    {
         $this->assertEquals(array('a', 1), Collection::filter(array('a', 1, 0, '', null)));
     }
 
-    function testDiff() {
+    function testDiff()
+    {
         $this->assertEquals(array(1 => 2, 2 => 3), Collection::diff(array(1, 2, 3), array(1)));
     }
 
-    function testContains() {
+    function testContains()
+    {
         $this->assertTrue(Collection::contains(array(1, 2, 3), 1));
         $this->assertTrue(! Collection::contains(array(1, 2, 3), 4));
     }
     
-    function testUnique() {
+    function testUnique()
+    {
         $this->assertEquals(array(1, 2, 3, true, 5 => '3'), Collection::unique(array(1, 2, 3, true, 2, '3')));
     }
     
-    function testSort() {
+    function testSort()
+    {
         $this->assertEquals(
             array(2 => 1, 0 => '2', 1 => 3),
             Collection::sort(array('2', 3, 1)));
     }
     
-    function testSortWithClosure() {
+    function testSortWithClosure()
+    {
         $this->assertEquals(
             array(1 => array(), 0 => array(1), 2 => array(1, 1)),
             Collection::sort(array(array(1), array(), array(1, 1)), function($array) {
@@ -68,29 +78,35 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    function testFirst() {
+    function testFirst()
+    {
         $this->assertEquals(1, Collection::first(array(1, 2, 3)));
     }
     
-    function testFirstWithClosure() {
+    function testFirstWithClosure()
+    {
         $even = function($value) { return ! ($value % 2); };
         $this->assertEquals(2, Collection::first(array(1, 2, 3), $even));
     }
     
-    function testFirstOnEmptyCollection() {
+    function testFirstOnEmptyCollection()
+    {
         $this->assertEquals(null, Collection::first(array()));
     }
     
-    function testFirstWithFallback() {
+    function testFirstWithFallback()
+    {
         $this->setExpectedException('Frosas\NotFoundException');
         Collection::first(array(), array('default' => 'exception'));
     }
     
-    function testLast() {
+    function testLast()
+    {
         $this->assertEquals(3, Collection::last(array(1, 2, 3)));
     }
     
-    function testGroup() {
+    function testGroup()
+    {
         $this->assertEquals(
             array('odd' => array(1, 2 => 3), 'even' => array(1 => 2)),
             Collection::group(array(1, 2, 3), function($value) {
@@ -99,39 +115,44 @@ class CollectionTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
-    function testAny() {
+    function testAny()
+    {
         $this->assertTrue((boolean) Collection::any(array(1, 2, 3), function($value) {
             return $value === 2;
         }));
-
         $this->assertFalse((boolean) Collection::any(array(1, 2, 3), function($value) {
             return $value === 4;
         }));
     }
 
-    function testAll() {
+    function testAll()
+    {
         $this->assertTrue((boolean) Collection::all(array(1, 2, 3), function($value) {
             return $value > 0;
         }));
-
         $this->assertFalse((boolean) Collection::all(array(1, 2, 3), function($value) {
             return $value > 1;
         }));
     }
 
-    function testNone() {
+    function testNone()
+    {
         $this->assertTrue((boolean) Collection::none(array(1, 2, 3), function($value) {
             return $value > 3;
         }));
-
         $this->assertFalse((boolean) Collection::none(array(1, 2, 3), function($value) {
             return $value > 2;
         }));
     }
 
-    function testCount() {
+    function testCount()
+    {
         $this->assertEquals(0, Collection::count(array()));
-
         $this->assertEquals(3, Collection::count(array(1, 2, 3)));
+    }
+
+    function testReverse()
+    {
+        $this->assertEquals(array(2 => 3, 1 => 2, 0 => 1), Collection::reverse(array(1, 2, 3)));
     }
 }

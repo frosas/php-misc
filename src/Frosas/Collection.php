@@ -247,6 +247,14 @@ final class Collection
     }
 
     /**
+     * @return array The collection reversed, the keys are preserved
+     */
+    static function reverse($traversable)
+    {
+        return array_reverse(static::toArray($traversable), true);
+    }
+
+    /**
      * Dummy function that simply returns the value itself
      * 
      * Used when a callable is optional
