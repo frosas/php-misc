@@ -7,7 +7,8 @@
         "email": "francescrosasbosque@gmail.com"
     }],
     "require": {
-        "php": ">=5.3.2"
+        "php": ">=5.3.2",
+        "phpoption/phpoption": "~1.2@dev"
     },
     "autoload": {
         "psr-0": { "Frosas": "src" }
