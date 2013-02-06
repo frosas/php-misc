@@ -4,8 +4,9 @@ namespace Frosas\Collection;
 
 use Frosas\Collection;
 use Frosas\Callback;
+use Frosas\Map;
 
-class Wrapper implements \IteratorAggregate, \Countable 
+class Wrapper implements \IteratorAggregate, \Countable, \ArrayAccess
 {
     private $collection;
 
@@ -55,5 +56,34 @@ class Wrapper implements \IteratorAggregate, \Countable
     function getIterator()
     {
         return new \ArrayIterator($this->collection);
+    }
+
+    function offsetExists($offset)
+    {
+        $this->toMap(); // TODO Avoid modifying it?
+        return array_key_exists($offset, $this->collection);
+    }
+
+    function offsetGet($offset)
+    {
+        $this->toMap(); // TODO Avoid modifying it?
+        return $this->collection[$offset];
+    }
+
+    function offsetSet($offset, $value)
+    {
+        $this->toMap();
+        $this->collection[$offset] = $value;
+    }
+
+    function offsetUnset($offset)
+    {
+        $this->toMap();
+        unset($this->collection[$offset]);
+    }
+
+    private function toMap()
+    {
+        if (! Map::isMap($this->collection)) $this->toArray();
     }
 }
