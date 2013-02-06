@@ -20,7 +20,7 @@ class Map
     static function go($map, $path)
     {
         foreach (static::toArray($path) as $key) {
-            if (! static::keyExists($map, $key)) return None::create();
+            if (! array_key_exists($key, $map)) return None::create();
             $map = $map[$key];
         }
         return new Some($map);
@@ -64,13 +64,6 @@ class Map
     static function isMap($value)
     {
         return is_array($value) || $value instanceof \ArrayAccess;
-    }
-
-    private static function keyExists($map, $key)
-    {
-        if (is_array($map)) return array_key_exists($key, $map);
-        if ($map instanceof \ArrayAccess) return $map->offsetExists($key);
-        throw new \InvalidArgumentException("Unknown map type");
     }
 
     private static function toArray($value)
