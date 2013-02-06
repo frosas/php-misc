@@ -2,64 +2,103 @@
 
 namespace Frosas;
 
+use PHPUnit_Framework_Assert as Assert;
+
 class MapTest extends \PHPUnit_Framework_TestCase
 {
     function testGoToOneLevelPath()
     {
-        $this->assertEquals('b', Map::go(array('a' => 'b'), 'a')->get());
+        $this->forEachMapType(array('a' => 'b'), function($map) {
+            Assert::assertEquals('b', Map::go($map, 'a')->get());
+        });
     }
 
     function testGoToOneLevelInvalidPath()
     {
-        $this->setExpectedException('RuntimeException');
-        Map::go(array('a' => 'b'), 'c')->get();
+        $this->forEachMapType(array('a' => 'b'), function($map) {
+            try {
+                Map::go($map, 'c')->get();
+                Assert::fail("RuntimeException expected");
+            } catch (\PHPUnit_Framework_AssertionFailedError $exception) {
+                throw $exception;
+            } catch (\RuntimeException $exception) {
+            }
+        });
     }
 
     function testGoToDeepPath()
     {
-        $this->assertEquals('c', Map::go(array('a' => array('b' => 'c')), array('a', 'b'))->get());
+        $this->forEachMapType(array('a' => array('b' => 'c')), function($map) {
+            Assert::assertEquals('c', Map::go($map, array('a', 'b'))->get());
+        });
     }
 
     function testGoToDeepInvalidPath()
     {
-        $this->setExpectedException('RuntimeException');
-        Map::go(array('a' => array('b' => 'c')), array('a', 'd'))->get();
+        $this->forEachMapType(array('a' => array('b' => 'c')), function($map) {
+            try {
+                Map::go($map, array('a', 'd'))->get();
+                Assert::fail("RuntimeException expected");
+            } catch (\PHPUnit_Framework_AssertionFailedError $exception) {
+                throw $exception;
+            } catch (\RuntimeException $exception) {
+            }
+        });
     }
 
     function testGet()
     {
-        $this->assertEquals('b', Map::get(array('a' => 'b'), 'a'));
+        $this->forEachMapType(array('a' => 'b'), function($map) {
+            Assert::assertEquals('b', Map::get($map, 'a'));
+        });
     }
 
     function testGetInvalidPath()
     {
-        $this->setExpectedException('RuntimeException');
-        Map::get(array('a' => 'b'), 'c');
-    }
-
-    function testGetInvalidPathWithDefault()
-    {
-        $this->assertEquals('d', Map::get(array('a' => 'b'), 'c', 'd'));
+        $this->forEachMapType(array('a' => 'b'), function($map) {
+            try {
+                Map::get($map, 'c');
+                Assert::fail("RuntimeException expected");
+            } catch (\PHPUnit_Framework_AssertionFailedError $exception) {
+                throw $exception;
+            } catch (\RuntimeException $exception) {
+            }
+        });
     }
 
     function testFind()
     {
-        $this->assertEquals('b', Map::find(array('a' => 'b'), 'a'));
+        $this->forEachMapType(array('a' => 'b'), function($map) {
+            Assert::assertEquals('b', Map::find($map, 'a'));
+        });
     }
 
     function testFindInvalidPath()
     {
-        $this->assertNull(Map::find(array('a' => 'b'), 'c'));
+        $this->forEachMapType(array('a' => 'b'), function($map) {
+            Assert::assertNull(Map::find($map, 'c'));
+        });
+    }
+
+    function testFindInvalidPathWithDefault()
+    {
+        $this->forEachMapType(array('a' => 'b'), function($map) {
+            Assert::assertEquals('d', Map::find($map, 'c', 'd'));
+        });
     }
 
     function testExists()
     {
-        $this->assertTrue(Map::exists(array('a' => 'b'), 'a'));
+        $this->forEachMapType(array('a' => 'b'), function($map) {
+            Assert::assertTrue(Map::exists($map, 'a'));
+        });
     }
 
     function testInvalidPathExists()
     {
-        $this->assertFalse(Map::exists(array('a' => 'b'), 'c'));
+        $this->forEachMapType(array('a' => 'b'), function($map) {
+            Assert::assertFalse(Map::exists($map, 'c'));
+        });
     }
 
     function testIsMap()
@@ -73,5 +112,11 @@ class MapTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(Map::isMap('foo'));
         $this->assertFalse(Map::isMap(new \stdClass));
         $this->assertFalse(Map::isMap(new \MultipleIterator)); // instanceof Iterator
+    }
+
+    private function forEachMapType($array, $callback)
+    {
+        $callback($array);
+        $callback(new \ArrayIterator($array)); // ArrayAccess
     }
 }

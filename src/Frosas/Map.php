@@ -29,23 +29,22 @@ class Map
     /**
      * @param $map array|\ArrayAccess
      * @param $path mixed A valid array key or an array of them
-     * @return mixed The value at $path or $default (if set)
-     * @throw Exception If $path doesn't exist and $default isn't set
+     * @return mixed The value at $path
+     * @throw RuntimeException If $path doesn't exist
      */
-    static function get($map, $path, $default = null)
+    static function get($map, $path)
     {
-        $option = static::go($map, $path);
-        return $default ? $option->getOrElse($default) : $option->get();
+        return static::go($map, $path)->get();
     }
 
     /**
      * @param $map array|\ArrayAccess
      * @param $path mixed A valid array key or an array of them
-     * @return mixed The value at $path or null
+     * @return mixed The value at $path or $default
      */
-    static function find($map, $path)
+    static function find($map, $path, $default = null)
     {
-        return static::go($map, $path)->getOrElse(null);
+        return static::go($map, $path)->getOrElse($default);
     }
 
     /**
