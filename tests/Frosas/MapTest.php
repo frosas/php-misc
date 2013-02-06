@@ -51,4 +51,27 @@ class MapTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull(Map::find(array('a' => 'b'), 'c'));
     }
+
+    function testExists()
+    {
+        $this->assertTrue(Map::exists(array('a' => 'b'), 'a'));
+    }
+
+    function testInvalidPathExists()
+    {
+        $this->assertFalse(Map::exists(array('a' => 'b'), 'c'));
+    }
+
+    function testIsMap()
+    {
+        $this->assertTrue(Map::isMap(array()));
+        $this->assertTrue(Map::isMap(new \SplObjectStorage));
+    }
+
+    function testIsNotMap()
+    {
+        $this->assertFalse(Map::isMap('foo'));
+        $this->assertFalse(Map::isMap(new \stdClass));
+        $this->assertFalse(Map::isMap(new \MultipleIterator)); // instanceof Iterator
+    }
 }
