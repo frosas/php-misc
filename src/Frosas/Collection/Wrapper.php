@@ -21,7 +21,7 @@ class Wrapper implements \IteratorAggregate, \Countable, \ArrayAccess
     function __call($method, $args) 
     {
         array_unshift($args, $this->collection);
-        $this->collection = Callback::call(array('Frosas\Collection', $method), $args);
+        $this->collection = call_user_func_array(array('Frosas\Collection', $method), $args);
         return $this;
     }
 
