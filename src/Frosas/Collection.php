@@ -5,7 +5,11 @@ namespace Frosas;
 /**
  * Handy methods for collections (arrays, iterators and other traversable structures)
  */
-final class Collection 
+use PhpOption\None;
+use PhpOption\Option;
+use PhpOption\Some;
+
+final class Collection
 {
     const DEFAULT_NULL = 'null';
     const DEFAULT_EXCEPTION = 'exception';
@@ -133,6 +137,8 @@ final class Collection
     }
 
     /**
+     * @deprecated See firstOption(), getFirst() and findFirst()
+     *
      * @param \Traversable $traversable
      * @param mixed $options Array of options or a condition closure
      *     - condition: A callable called for every element returning whether it should be taken in account
@@ -144,21 +150,37 @@ final class Collection
     static function first($traversable, $options = array()) 
     {
         if ($options instanceof \Closure) $options = array('condition' => $options);
-        $options += array('default' => static::DEFAULT_NULL);
-        
-        foreach ($traversable as $value) {
-            if (isset($options['condition']) && ! call_user_func($options['condition'], $value)) {
-                continue;
-            }
-            
-            return $value;
-        }
-        
+        $options += array('default' => static::DEFAULT_NULL, 'condition' => null);
+
+        $first = static::firstOption($traversable, $options['condition']);
+
         switch ($options['default']) {
-            case static::DEFAULT_NULL: return null;
-            case static::DEFAULT_EXCEPTION: throw new NotFoundException;
-            default: throw new \InvalidArgumentException("Unknown default");
+            case static::DEFAULT_NULL: return $first->getOrElse(null);
+            case static::DEFAULT_EXCEPTION: return $first->getOrThrow(new NotFoundException);
+            default: throw new \InvalidArgumentException;
         }
+    }
+
+    /**
+     * @return Option
+     */
+    static function firstOption($traversable, $condition = null)
+    {
+        foreach ($traversable as $value) {
+            if ($condition && ! call_user_func($condition, $value)) continue;
+            return new Some($value);
+        }
+        return None::create();
+    }
+
+    static function getFirst($traversable, $condition = null)
+    {
+        return static::firstOption($traversable, $condition)->get();
+    }
+
+    static function findFirst($traversable, $condition = null)
+    {
+        return static::firstOption($traversable, $condition)->getOrElse(null);
     }
 
     /**
