@@ -16,11 +16,10 @@ class Backtrace
         $stepsCountLength = strlen(count($this->backtrace));
         return Collection::wrap($this->backtrace)
             ->map(function($step, $index) use ($stepsCountLength) {
-                $string = '';
+                $string = sprintf("%{$stepsCountLength}s. ", $index);
                 if (isset($step['class'])) $string .= $step['class'] . '::';
                 $string .= $step['function'] . '()';
-                $string .= ' @ ' . $step['file'] . ':' . $step['line'];
-                $string = sprintf("%{$stepsCountLength}s. %s", $index, $string);
+                if (isset($step['file'])) $string .= ' @ ' . $step['file'] . ':' . $step['line'];
                 return $string;
             })
             ->reduce(function($backtrace, $step) { return "$backtrace$step\n"; });
