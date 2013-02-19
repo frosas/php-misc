@@ -13,10 +13,11 @@ class Backtrace
 
     function __toString()
     {
-        $stepsCountLength = strlen(count($this->backtrace));
+        $stepsCount = count($this->backtrace);
+        $stepsCountLength = strlen($stepsCount);
         return Collection::wrap($this->backtrace)
-            ->map(function($step, $index) use ($stepsCountLength) {
-                $string = sprintf("%{$stepsCountLength}s. ", $index);
+            ->map(function($step, $index) use ($stepsCount, $stepsCountLength) {
+                $string = sprintf("%{$stepsCountLength}s. ", $stepsCount - $index);
                 if (isset($step['class'])) $string .= $step['class'] . '::';
                 $string .= $step['function'] . '()';
                 if (isset($step['file'])) $string .= ' @ ' . $step['file'] . ':' . $step['line'];
