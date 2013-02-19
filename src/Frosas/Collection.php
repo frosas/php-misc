@@ -110,22 +110,26 @@ final class Collection
      * Sorting type is SORT_STRING. Keys are maintained.
      * 
      * @param \Traversable $traversable
-     * @param callable $elementToString Returns the value that is actually used to do the sorting.
-     *                                  The value itself is used by default.
+     * @param array $options
+     *     - getValue: callable to get the value of each element used to do the 
+     *       sorting (the element itself by default)
+     *     - sorting: any flag accepted by sort() (SORT_STRING by default)
      * @return array The $traversable as a sorted array
      */
-    static function sort($traversable, $elementToString = null) 
+    static function sort($traversable, $options = null)
     {
-        $elementToString = $elementToString ?: 'static::get';
-        
+        if (! is_array($options)) $options = array('getValue' => $options);
+        $options += array('sorting' => SORT_STRING);
+        if (! isset($options['getValue'])) $options['getValue'] = 'static::get';
+
         $elementsByString = array();
         foreach ($traversable as $key => $value) {
-            $elementString = call_user_func($elementToString, $value, $key);
+            $elementString = call_user_func($options['getValue'], $value, $key);
             $elementsByString[$elementString][] = array($key, $value);
         }
-        
-        if (! ksort($elementsByString, SORT_STRING)) throw new \InvalidArgumentException;
-        
+
+        if (! ksort($elementsByString, $options['sorting'])) throw new \InvalidArgumentException;
+
         $sorted = array();
         foreach ($elementsByString as $elementsWithSameString) {
             foreach ($elementsWithSameString as $keyAndValue) {
