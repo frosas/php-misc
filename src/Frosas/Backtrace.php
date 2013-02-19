@@ -6,9 +6,20 @@ class Backtrace
 {
     private $backtrace;
 
-    function __construct()
+    static function createFromException(\Exception $exception)
     {
-        $this->backtrace = debug_backtrace();
+        $backtrace = $exception->getTrace();
+
+        // Wondering why PHP removes this information
+        $backtrace[0]['file'] = $exception->getFile();
+        $backtrace[0]['line'] = $exception->getLine();
+
+        return new static($backtrace);
+    }
+
+    function __construct($backtrace = null)
+    {
+        $this->backtrace = $backtrace ?: debug_backtrace();
     }
 
     function __toString()
