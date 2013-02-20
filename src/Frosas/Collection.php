@@ -179,7 +179,9 @@ final class Collection
 
     static function getFirst($traversable, $condition = null)
     {
-        return static::firstOption($traversable, $condition)->get();
+        return static::firstOption($traversable, $condition)->getOrCall(function() {
+            throw new NotFoundException;
+        });
     }
 
     static function findFirst($traversable, $condition = null)
