@@ -141,31 +141,6 @@ final class Collection
     }
 
     /**
-     * @deprecated See firstOption(), getFirst() and findFirst()
-     *
-     * @param \Traversable $traversable
-     * @param mixed $options Array of options or a condition closure
-     *     - condition: A callable called for every element returning whether it should be taken in account
-     *     - default: What to do when no element is found. 'null' (default) to return null or
-     *       'exception' to throw an exception.
-     * @return mixed The first element or null if $options['default'] == 'null'
-     * @throws NotFoundException If no elements are found and $options['default'] == 'exception'
-     */
-    static function first($traversable, $options = array()) 
-    {
-        if ($options instanceof \Closure) $options = array('condition' => $options);
-        $options += array('default' => static::DEFAULT_NULL, 'condition' => null);
-
-        $first = static::firstOption($traversable, $options['condition']);
-
-        switch ($options['default']) {
-            case static::DEFAULT_NULL: return $first->getOrElse(null);
-            case static::DEFAULT_EXCEPTION: return $first->getOrThrow(new NotFoundException);
-            default: throw new \InvalidArgumentException;
-        }
-    }
-
-    /**
      * @return Option
      */
     static function firstOption($traversable, $condition = null)
@@ -177,7 +152,7 @@ final class Collection
         return None::create();
     }
 
-    static function getFirst($traversable, $condition = null)
+    static function first($traversable, $condition = null)
     {
         return static::firstOption($traversable, $condition)->getOrCall(function() {
             throw new NotFoundException;

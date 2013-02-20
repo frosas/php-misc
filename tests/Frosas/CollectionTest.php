@@ -91,13 +91,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     
     function testFirstOnEmptyCollection()
     {
-        $this->assertEquals(null, Collection::first(array()));
-    }
-    
-    function testFirstWithFallback()
-    {
         $this->setExpectedException('Frosas\NotFoundException');
-        Collection::first(array(), array('default' => 'exception'));
+        Collection::first(array());
+    }
+
+    function testFindFirstOnEmptyCollection()
+    {
+        $this->assertNull(Collection::findFirst(array()));
     }
     
     function testLast()
