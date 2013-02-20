@@ -2,13 +2,13 @@
 
 namespace Frosas;
 
-/**
- * Handy methods for collections (arrays, iterators and other traversable structures)
- */
 use PhpOption\None;
 use PhpOption\Option;
 use PhpOption\Some;
 
+/**
+ * Handy methods for collections (arrays, iterators and other traversable structures)
+ */
 final class Collection
 {
     const DEFAULT_NULL = 'null';
