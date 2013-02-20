@@ -3,7 +3,6 @@
 namespace Frosas\Collection;
 
 use Frosas\Collection;
-use Frosas\Callback;
 use Frosas\Map;
 
 class Wrapper implements \IteratorAggregate, \Countable, \ArrayAccess
@@ -39,7 +38,7 @@ class Wrapper implements \IteratorAggregate, \Countable, \ArrayAccess
      */
     function apply($callable) 
     {
-        $this->collection = Callback::call($callable, array($this->collection));
+        $this->collection = call_user_func($callable, $this->collection);
         return $this;
     }
 
