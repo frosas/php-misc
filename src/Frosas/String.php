@@ -34,4 +34,9 @@ class String
             
         return $string;
     }
+
+    static function indent($string, $spaces = 4)
+    {
+        return preg_replace('/(^|\n)/', '$1' . str_repeat(' ', $spaces), $string);
+    }
 }

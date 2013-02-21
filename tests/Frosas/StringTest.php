@@ -36,4 +36,9 @@ class StringTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('InvalidArgumentException');
         String::shorten('123', 0);
     }
+
+    function testIndent()
+    {
+        $this->assertEquals("    1\n    2", String::indent("1\n2"));
+    }
 }
