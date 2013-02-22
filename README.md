@@ -7,7 +7,8 @@ A bunch of classes and functions to make working with PHP easier. Usability is p
 # Testing
 
 ```bash
-$ phpunit
+$ composer update --dev
+$ vendor/bin/phpunit
 ```
 
 [![Build Status](https://secure.travis-ci.org/frosas/php-misc.png)](http://travis-ci.org/frosas/php-misc)
